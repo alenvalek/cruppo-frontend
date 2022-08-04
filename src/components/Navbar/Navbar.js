@@ -12,9 +12,7 @@ const Navbar = ({ children }) => {
 					<Button color='inherit' LinkComponent={Link} to='/'>
 						Job application
 					</Button>
-					<Button color='inherit' link>
-						Login
-					</Button>
+					<Button color='inherit'>Login</Button>
 				</Toolbar>
 			</AppBar>
 		</Box>

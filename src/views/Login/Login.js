@@ -8,8 +8,31 @@ import {
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
+import { useFormik } from "formik";
+import { connect } from "react-redux";
+import { loginUser } from "../../store/actions/auth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-const Login = () => {
+const Login = ({ user, loginUser }) => {
+	const navigate = useNavigate();
+
+	const formik = useFormik({
+		initialValues: {
+			email: "",
+			password: "",
+		},
+		onSubmit: (values) => {
+			loginUser(values.email, values.password);
+		},
+	});
+
+	useEffect(() => {
+		if (user) {
+			navigate("/home");
+		}
+	}, [user]);
+
 	return (
 		<Grid
 			container
@@ -44,6 +67,8 @@ const Login = () => {
 							name='email'
 							variant='outlined'
 							fullWidth
+							onChange={formik.handleChange}
+							value={formik.values.email}
 						/>
 						<TextField
 							label='Password'
@@ -51,8 +76,14 @@ const Login = () => {
 							name='password'
 							variant='outlined'
 							fullWidth
+							onChange={formik.handleChange}
+							value={formik.values.password}
 						/>
-						<Button fullWidth variant='contained' color='primary'>
+						<Button
+							fullWidth
+							variant='contained'
+							color='primary'
+							onClick={formik.handleSubmit}>
 							Login
 						</Button>
 						<Link to='/account-recovery'>Forgot your credentials?</Link>
@@ -63,4 +94,8 @@ const Login = () => {
 	);
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+	user: state.auth.user,
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);
