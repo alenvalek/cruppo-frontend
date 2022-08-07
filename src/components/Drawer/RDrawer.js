@@ -9,22 +9,26 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import LoginIcon from "@mui/icons-material/Login";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import HomeIcon from "@mui/icons-material/Home";
-import LogoutIcon from "@mui/icons-material/Logout";
+
 import NavLink from "../NavLink/NavLink";
 import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
 
 import { logoutUser } from "../../store/actions/auth";
+
+// icons
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import LoginIcon from "@mui/icons-material/Login";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
+import FolderIcon from "@mui/icons-material/Folder";
 
 const drawerWidth = 240;
 
@@ -97,8 +101,13 @@ const RDrawer = ({ children, user, loading, logoutUser }) => {
 		},
 		{
 			text: "Home",
-			linkTo: "/home",
+			linkTo: "/",
 			icon: <HomeIcon />,
+		},
+		{
+			text: "Projects",
+			linkTo: "/projects",
+			icon: <FolderIcon />,
 		},
 	];
 

@@ -8,8 +8,9 @@ import { loadUserData } from "./store/actions/auth";
 import { useEffect } from "react";
 import PrivateRoutes from "./components/PrivateRoute/PrivateRoutes";
 import Home from "./views/Home";
+import Projects from "./views/Projects/Projects";
 
-function App({ loadUserData }) {
+function App({ loadUserData, user, loading }) {
 	useEffect(() => {
 		loadUserData();
 	}, []);
@@ -19,14 +20,23 @@ function App({ loadUserData }) {
 			{/* <Navbar /> */}
 			<RDrawer>
 				<Routes>
-					<Route path='/' index element={<Login />} />
-					<Route element={<PrivateRoutes />}>
-						<Route path='/home' element={<Home />} exact />
-					</Route>
+					{!user && !loading ? (
+						<Route path='/' element={<Login />} />
+					) : (
+						<Route element={<PrivateRoutes />}>
+							<Route path='/' element={<Home />} />
+							<Route path='/projects' element={<Projects />} />
+						</Route>
+					)}
 				</Routes>
 			</RDrawer>
 		</>
 	);
 }
 
-export default connect(null, { loadUserData })(App);
+const mapStateToProps = (state) => ({
+	user: state.auth.user,
+	loading: state.auth.loading,
+});
+
+export default connect(mapStateToProps, { loadUserData })(App);

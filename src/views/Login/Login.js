@@ -27,12 +27,6 @@ const Login = ({ user, loginUser }) => {
 		},
 	});
 
-	useEffect(() => {
-		if (user) {
-			navigate("/home");
-		}
-	}, [user]);
-
 	return (
 		<Grid
 			container
