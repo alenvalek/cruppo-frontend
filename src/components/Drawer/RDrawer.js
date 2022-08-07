@@ -29,6 +29,10 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
 import FolderIcon from "@mui/icons-material/Folder";
+import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { useNavigate } from "react-router-dom";
+import { setProject } from "../../store/actions/project";
 
 const drawerWidth = 240;
 
@@ -77,8 +81,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 	justifyContent: "flex-end",
 }));
 
-const RDrawer = ({ children, user, loading, logoutUser }) => {
+const RDrawer = ({
+	children,
+	user,
+	loading,
+	logoutUser,
+	project,
+	setProject,
+}) => {
 	const theme = useTheme();
+	const navigate = useNavigate();
+
 	const noUserLinks = [
 		{
 			text: "Login",
@@ -89,6 +102,31 @@ const RDrawer = ({ children, user, loading, logoutUser }) => {
 			text: "Apply for a job",
 			linkTo: "/application",
 			icon: <NoteAddIcon />,
+		},
+	];
+
+	const cleanReturn = () => {
+		navigate("/projects", { replace: true });
+		setProject({ id: 0 });
+	};
+
+	const projectLinks = [
+		{
+			text: "Logout",
+			linkTo: false,
+			action: () => logoutUser(),
+			icon: <LogoutIcon />,
+		},
+		{
+			text: "Exit the project",
+			linkTo: false,
+			action: () => cleanReturn(),
+			icon: <ExitToAppIcon />,
+		},
+		{
+			text: "Board",
+			linkTo: `/projects/${project}/board`,
+			icon: <DeveloperBoardIcon />,
 		},
 	];
 
@@ -106,7 +144,7 @@ const RDrawer = ({ children, user, loading, logoutUser }) => {
 		},
 		{
 			text: "Projects",
-			linkTo: "/projects",
+			linkTo: `/projects`,
 			icon: <FolderIcon />,
 		},
 	];
@@ -114,12 +152,14 @@ const RDrawer = ({ children, user, loading, logoutUser }) => {
 	const [links, setLinks] = React.useState(noUserLinks);
 
 	React.useEffect(() => {
-		if (user) {
+		if (user && project && !loading) {
+			setLinks(projectLinks);
+		} else if (user && !loading) {
 			setLinks(userLinks);
 		} else {
 			setLinks(noUserLinks);
 		}
-	}, [user]);
+	}, [user, project]);
 
 	const [open, setOpen] = React.useState(false);
 
@@ -201,6 +241,7 @@ const RDrawer = ({ children, user, loading, logoutUser }) => {
 const mapStateToProps = (state) => ({
 	user: state.auth.user,
 	loading: state.auth.loading,
+	project: state.project.currentProject,
 });
 
-export default connect(mapStateToProps, { logoutUser })(RDrawer);
+export default connect(mapStateToProps, { logoutUser, setProject })(RDrawer);

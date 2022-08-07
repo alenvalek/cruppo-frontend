@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function getWindowDimensions() {
@@ -54,7 +55,7 @@ const rows = [
 	},
 ];
 
-export default function ProjectDataTable() {
+const ProjectDataTable = () => {
 	const { width, height } = useWindowDimensions();
 	let elementCount = 6;
 	const columns = [
@@ -62,37 +63,34 @@ export default function ProjectDataTable() {
 			field: "projectName",
 			headerName: "Name",
 			width: width / elementCount,
-			editable: true,
+			renderCell: (params) => (
+				<Link to='/projects/1/board'>{params.row.projectName}</Link>
+			),
 		},
 		{
 			field: "tag",
 			headerName: "Tag",
 			width: width / elementCount,
-			editable: true,
 		},
 		{
 			field: "type",
 			headerName: "Type",
 			width: width / elementCount,
-			editable: true,
 		},
 		{
 			field: "owner",
 			headerName: "Owner",
 			width: width / elementCount,
-			editable: true,
 		},
 		{
 			field: "department",
 			headerName: "Department",
 			width: width / elementCount,
-			editable: true,
 		},
 		{
 			field: "githubURL",
 			headerName: "GitHub URL",
 			width: width / elementCount - 100,
-			editable: true,
 		},
 	];
 
@@ -108,4 +106,6 @@ export default function ProjectDataTable() {
 			/>
 		</Box>
 	);
-}
+};
+
+export default ProjectDataTable;

@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import PrivateRoutes from "./components/PrivateRoute/PrivateRoutes";
 import Home from "./views/Home";
 import Projects from "./views/Projects/Projects";
+import Project from "./views/Project/Project";
 
 function App({ loadUserData, user, loading }) {
 	useEffect(() => {
@@ -26,6 +27,7 @@ function App({ loadUserData, user, loading }) {
 						<Route element={<PrivateRoutes />}>
 							<Route path='/' element={<Home />} />
 							<Route path='/projects' element={<Projects />} />
+							<Route path='/projects/:projectid/board' element={<Project />} />
 						</Route>
 					)}
 				</Routes>

@@ -6,3 +6,6 @@ export const AUTH_FAIL = "AUTH_FAIL";
 export const LOGOUT = "LOGOUT";
 
 export const LOAD_USER_DATA = "LOAD_USER_DATA";
+
+// Projects
+export const SET_PROJECT = "SET_PROJECT";

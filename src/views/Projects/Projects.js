@@ -45,7 +45,7 @@ const Projects = () => {
 					<div className={styles.projectListContainer}>
 						<ul className={styles.projectList}>
 							{projectMockUps.map((project) => (
-								<li>
+								<li key={project.id}>
 									<ProjectCard type={project.type} name={project.name} />
 								</li>
 							))}
