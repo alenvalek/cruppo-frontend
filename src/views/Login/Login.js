@@ -39,9 +39,9 @@ const Login = ({ user, loginUser }) => {
 			direction='column'
 			alignItems='center'
 			justifyContent='center'
-			minHeight='100vh'>
+			minHeight='80vh'>
 			<Grid item xs={12} md={12}>
-				<Paper elevation={10} sx={{ padding: "2rem", width: "300px" }}>
+				<Paper elevation={10} sx={{ padding: "2rem", width: "500px" }}>
 					<Grid
 						container
 						direction='column'

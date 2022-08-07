@@ -5,7 +5,7 @@ const Home = ({ user, isLoading }) => {
 	return (
 		<>
 			{user && !isLoading && (
-				<Grid container mt={10}>
+				<Grid container>
 					<Typography variant='h2'>
 						Welcome, {`${user.firstName}  ${user.lastName}`}
 					</Typography>
