@@ -20,11 +20,9 @@ import LoginIcon from "@mui/icons-material/Login";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom";
 import NavLink from "../NavLink/NavLink";
 import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
-import styles from "./RDrawer.module.css";
 
 import { logoutUser } from "../../store/actions/auth";
 
