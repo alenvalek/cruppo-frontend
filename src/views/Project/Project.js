@@ -1,4 +1,12 @@
-import { Grid, IconButton, Typography } from "@mui/material";
+import {
+	Avatar,
+	Button,
+	Grid,
+	IconButton,
+	Link,
+	Modal,
+	Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { setProject } from "../../store/actions/project";
@@ -7,11 +15,29 @@ import { range, orderBy } from "lodash";
 import ReorderIcon from "@mui/icons-material/Reorder";
 import Chip from "@mui/material/Chip";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditIcon from "@mui/icons-material/Edit";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import moment from "moment";
 
 const Project = ({ setProject }) => {
 	useEffect(() => {
 		setProject({ id: 1 });
 	}, []);
+
+	const detailModalStyle = {
+		position: "absolute",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
+		width: "90%",
+		backgroundColor: "white",
+		border: "1px solid #000",
+		borderRadius: 5,
+		boxShadow: 24,
+		padding: 10,
+	};
+
+	const [selectedTask, setSelectedTask] = useState({});
 
 	const _tasks = [
 		{
@@ -73,6 +99,7 @@ const Project = ({ setProject }) => {
 		},
 	];
 
+	const [modalOpen, setModalOpen] = useState(false);
 	const [tasks, setTasks] = useState(_tasks);
 
 	const [columns, setColumns] = useState({
@@ -81,6 +108,13 @@ const Project = ({ setProject }) => {
 		IN_REVIEW: { id: "3", title: "In review" },
 		DONE: { id: "4", title: "Done" },
 	});
+
+	const handleModal = (item) => {
+		if (item && item.id) {
+			setSelectedTask(item);
+		}
+		setModalOpen((prev) => !prev);
+	};
 
 	const handleDrag = (res) => {
 		const { source, destination, draggableId } = res;
@@ -126,7 +160,6 @@ const Project = ({ setProject }) => {
 			} else {
 				const currentColumn = source.droppableId;
 				if (task.id === draggableId) {
-					console.log("dest: ", destination.index);
 					task.position = destination.index;
 					task.column = destination.droppableId;
 					return task;
@@ -150,7 +183,6 @@ const Project = ({ setProject }) => {
 			}
 		});
 		setTasks(modifiedArray);
-		console.log(tasks);
 	};
 
 	return (
@@ -233,10 +265,12 @@ const Project = ({ setProject }) => {
 																					</Typography>
 																				</Grid>
 																				<Grid item xs={1}>
-																					<IconButton>
+																					<IconButton
+																						onClick={() => handleModal(item)}>
 																						<MoreVertIcon />
 																					</IconButton>
 																				</Grid>
+
 																				<Grid item xs={12}>
 																					{item.priority === 1 && (
 																						<Chip
@@ -278,6 +312,175 @@ const Project = ({ setProject }) => {
 					</DragDropContext>
 				</div>
 			</Grid>
+			<Modal open={modalOpen} onClose={handleModal}>
+				<Grid
+					style={detailModalStyle}
+					container
+					width={1000}
+					alignItems='center'>
+					{selectedTask && selectedTask.text && (
+						<>
+							<Grid item xs={12} md={8}>
+								<Grid container>
+									<Grid item xs={12}>
+										<Typography variant='h3'>Task details</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										{/* TODO: ADD TITLE INSTEAD OF TEXT */}
+										<Typography variant='h6'>
+											TITLE: {selectedTask.text}
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Button
+											startIcon={<EditIcon />}
+											variant='outlined'
+											color='info'
+											sx={{ marginRight: "1rem" }}>
+											Edit
+										</Button>
+										<Button
+											startIcon={<AddCommentIcon />}
+											variant='outlined'
+											color='info'
+											sx={{ marginRight: "1rem" }}>
+											Add a work log
+										</Button>
+										<Button
+											variant='outlined'
+											color='info'
+											sx={{ marginRight: "1rem" }}>
+											Assign self
+										</Button>
+									</Grid>
+									<Grid item xs={6} mt={3}>
+										<Typography variant='h6'>Type: Task</Typography>
+									</Grid>
+									<Grid item xs={6} mt={3}>
+										<Typography variant='h6'>
+											Status:{" "}
+											{selectedTask.column.split("_").join(" ").toLowerCase()}
+										</Typography>
+									</Grid>
+									<Grid item xs={6}>
+										<Typography variant='h6'>
+											Priority: {selectedTask.priority}
+										</Typography>
+									</Grid>
+									<Grid item xs={6}>
+										<Typography variant='h6'>
+											IsDone: {selectedTask.column === "DONE" ? "yes" : "no"}
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography variant='h6'>
+											Description: {selectedTask.text}
+										</Typography>
+									</Grid>
+									<Grid item xs={12} mt={3} mb={3}>
+										<hr></hr>
+									</Grid>
+
+									<Grid item xs={12}>
+										<Typography variant='body1'>
+											<strong>Activity</strong>
+										</Typography>
+									</Grid>
+									<Grid item xs={12} mt={3}>
+										<Grid container>
+											<Grid item xs={3}>
+												<Typography variant='body1'>
+													<strong>DATE</strong>
+												</Typography>
+											</Grid>
+											<Grid item xs={3}>
+												<Typography variant='body1'>
+													<strong>TITLE</strong>
+												</Typography>
+											</Grid>
+											<Grid item xs={3}>
+												<Typography variant='body1'>
+													<strong>URL</strong>
+												</Typography>
+											</Grid>
+											<Grid item xs={3} sx={{ wordBreak: "normal" }}>
+												<Typography variant='body1'>
+													<strong>Description</strong>
+												</Typography>
+											</Grid>
+										</Grid>
+									</Grid>
+									{/* MAP THROUGH WORK LOG */}
+									<Grid item xs={12}>
+										<hr></hr>
+										<Grid container>
+											<Grid item xs={3}>
+												<Typography variant='body1'>
+													{moment("20220801").format("DD/MM/YYYY h:mm:ss")}
+												</Typography>
+											</Grid>
+											<Grid item xs={3}>
+												<Typography variant='body1'>Fixing nav</Typography>
+											</Grid>
+											<Grid item xs={3}>
+												<Link
+													target='_blank'
+													href='https://github.com/alenvalek/cruppo-frontend/commit/67fa4a84d6f8a4fd22cdb2b44c247751683747f8'
+													variant='body1'>
+													COMMIT URL
+												</Link>
+											</Grid>
+											<Grid item xs={3} sx={{ wordBreak: "break-word" }}>
+												<Typography variant='body1'>
+													Some
+													descriptionhsdahaushdasssssssssssssssssssssssssssssssssssssssssss
+												</Typography>
+											</Grid>
+										</Grid>
+									</Grid>
+								</Grid>
+								<hr></hr>
+							</Grid>
+							<Grid item xs={12} md={4} mt={10}>
+								<Grid container alignItems='center'>
+									<Grid item xs={3}>
+										<Typography variant='h6' ml={2}>
+											Assigned:
+										</Typography>
+									</Grid>
+									<Grid
+										item
+										xs={9}
+										display='flex'
+										justifyContent='center'
+										alignItems='center'
+										columnGap={3}>
+										<Typography variant='h6'>
+											Alen Valek ( System Admin )
+										</Typography>
+										<Avatar sx={{ bgcolor: "orange" }}>AV</Avatar>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography variant='h6' ml={2}>
+											Votes: 0
+										</Typography>
+									</Grid>
+									<Grid item xs={9}>
+										<Typography variant='h6' ml={2}>
+											Created: {moment("20220811").format("DD/MM/YYYY")}
+										</Typography>
+									</Grid>
+									<Grid item xs={9}>
+										<Typography variant='h6' ml={2}>
+											Current progress: 50%
+										</Typography>
+									</Grid>
+								</Grid>
+							</Grid>
+						</>
+					)}
+				</Grid>
+			</Modal>
 		</Grid>
 	);
 };
