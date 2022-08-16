@@ -19,7 +19,8 @@ import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
 
 import { logoutUser } from "../../store/actions/auth";
-
+import { useNavigate } from "react-router-dom";
+import { setProject } from "../../store/actions/project";
 // icons
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -31,8 +32,9 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import FolderIcon from "@mui/icons-material/Folder";
 import DeveloperBoardIcon from "@mui/icons-material/DeveloperBoard";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { useNavigate } from "react-router-dom";
-import { setProject } from "../../store/actions/project";
+import StorageIcon from "@mui/icons-material/Storage";
+import SummarizeIcon from "@mui/icons-material/Summarize";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 const drawerWidth = 240;
 
@@ -124,6 +126,11 @@ const RDrawer = ({
 			icon: <ExitToAppIcon />,
 		},
 		{
+			text: "Summary",
+			linkTo: `/projects/${project}/summary`,
+			icon: <SummarizeIcon />,
+		},
+		{
 			text: "Board",
 			linkTo: `/projects/${project}/board`,
 			icon: <DeveloperBoardIcon />,
@@ -141,6 +148,16 @@ const RDrawer = ({
 			text: "Home",
 			linkTo: "/",
 			icon: <HomeIcon />,
+		},
+		{
+			text: "Activity",
+			linkTo: "/activity",
+			icon: <StorageIcon />,
+		},
+		{
+			text: "Users",
+			linkTo: "/users",
+			icon: <PeopleAltIcon />,
 		},
 		{
 			text: "Projects",

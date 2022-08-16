@@ -10,6 +10,9 @@ import PrivateRoutes from "./components/PrivateRoute/PrivateRoutes";
 import Home from "./views/Home";
 import Projects from "./views/Projects/Projects";
 import Project from "./views/Project/Project";
+import Summary from "./views/Summary/Summary";
+import Activity from "./views/Activity/Activity";
+import UserManagement from "./views/UserManagement/UserManagement";
 
 function App({ loadUserData, user, loading }) {
 	useEffect(() => {
@@ -26,8 +29,14 @@ function App({ loadUserData, user, loading }) {
 					) : (
 						<Route element={<PrivateRoutes />}>
 							<Route path='/' element={<Home />} />
+							<Route path='/activity' element={<Activity />} />
 							<Route path='/projects' element={<Projects />} />
+							<Route path='/users' element={<UserManagement />} />
 							<Route path='/projects/:projectid/board' element={<Project />} />
+							<Route
+								path='/projects/:projectid/summary'
+								element={<Summary />}
+							/>
 						</Route>
 					)}
 				</Routes>

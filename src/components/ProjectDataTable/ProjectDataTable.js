@@ -91,6 +91,16 @@ const ProjectDataTable = () => {
 			field: "githubURL",
 			headerName: "GitHub URL",
 			width: width / elementCount - 100,
+			renderCell: (params) =>
+				!params.rows?.githubURL ? (
+					<a target='_blank' href='https://github.com/alenvalek'>
+						Redirect me
+					</a>
+				) : (
+					<span>
+						<strong>-</strong>
+					</span>
+				),
 		},
 	];
 
