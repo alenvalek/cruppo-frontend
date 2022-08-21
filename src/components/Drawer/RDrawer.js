@@ -19,8 +19,8 @@ import { connect } from "react-redux";
 import Spinner from "../Spinner/Spinner";
 
 import { logoutUser } from "../../store/actions/auth";
-import { useNavigate } from "react-router-dom";
-import { setProject } from "../../store/actions/project";
+import { useNavigate, useParams } from "react-router-dom";
+import { resetProject } from "../../store/actions/project";
 // icons
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -35,6 +35,9 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import StorageIcon from "@mui/icons-material/Storage";
 import SummarizeIcon from "@mui/icons-material/Summarize";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import WorkIcon from "@mui/icons-material/Work";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 const drawerWidth = 240;
 
@@ -89,7 +92,7 @@ const RDrawer = ({
 	loading,
 	logoutUser,
 	project,
-	setProject,
+	resetProject,
 }) => {
 	const theme = useTheme();
 	const navigate = useNavigate();
@@ -107,16 +110,21 @@ const RDrawer = ({
 		},
 	];
 
+	const cleanLogout = () => {
+		logoutUser();
+		navigate("/", { replace: true });
+	};
+
 	const cleanReturn = () => {
 		navigate("/projects", { replace: true });
-		setProject({ id: 0 });
+		resetProject();
 	};
 
 	const projectLinks = [
 		{
 			text: "Logout",
 			linkTo: false,
-			action: () => logoutUser(),
+			action: () => cleanLogout(),
 			icon: <LogoutIcon />,
 		},
 		{
@@ -127,13 +135,18 @@ const RDrawer = ({
 		},
 		{
 			text: "Summary",
-			linkTo: `/projects/${project}/summary`,
+			linkTo: `/projects/${project?._id}/summary`,
 			icon: <SummarizeIcon />,
 		},
 		{
 			text: "Board",
-			linkTo: `/projects/${project}/board`,
+			linkTo: `/projects/${project?._id}/board`,
 			icon: <DeveloperBoardIcon />,
+		},
+		{
+			text: "Manage team",
+			linkTo: `/projects/${project?._id}/team`,
+			icon: <SupervisedUserCircleIcon />,
 		},
 	];
 
@@ -141,7 +154,7 @@ const RDrawer = ({
 		{
 			text: "Logout",
 			linkTo: false,
-			action: () => logoutUser(),
+			action: () => cleanLogout(),
 			icon: <LogoutIcon />,
 		},
 		{
@@ -153,11 +166,30 @@ const RDrawer = ({
 			text: "Activity",
 			linkTo: "/activity",
 			icon: <StorageIcon />,
+			perms: ["hr", "admin", "owner"],
+		},
+		{
+			text: "Complaints",
+			linkTo: "/complaints",
+			icon: <DescriptionIcon />,
+			perms: ["hr", "admin", "owner"],
+		},
+		{
+			text: "File a complaint",
+			linkTo: "/create-complaint",
+			icon: <NoteAddIcon />,
+		},
+		{
+			text: "Jobs",
+			linkTo: "/jobs",
+			icon: <WorkIcon />,
+			perms: ["hr", "admin", "owner"],
 		},
 		{
 			text: "Users",
 			linkTo: "/users",
 			icon: <PeopleAltIcon />,
+			perms: ["hr", "admin", "owner"],
 		},
 		{
 			text: "Projects",
@@ -167,7 +199,7 @@ const RDrawer = ({
 	];
 
 	const [links, setLinks] = React.useState(noUserLinks);
-
+	const projectID = useParams().projectid;
 	React.useEffect(() => {
 		if (user && project && !loading) {
 			setLinks(projectLinks);
@@ -176,7 +208,7 @@ const RDrawer = ({
 		} else {
 			setLinks(noUserLinks);
 		}
-	}, [user, project]);
+	}, [user, project, projectID]);
 
 	const [open, setOpen] = React.useState(false);
 
@@ -229,21 +261,39 @@ const RDrawer = ({
 				</DrawerHeader>
 				<Divider />
 				<List>
-					{links.map((link, index) => (
-						<ListItem key={index} disablePadding>
-							{link.action ? (
-								<ListItemButton onClick={link.action}>
-									<ListItemIcon>{link.icon}</ListItemIcon>
-									<ListItemText primary={link.text} />
-								</ListItemButton>
-							) : (
-								<ListItemButton component={NavLink} to={link.linkTo}>
-									<ListItemIcon>{link.icon}</ListItemIcon>
-									<ListItemText>{link.text}</ListItemText>
-								</ListItemButton>
-							)}
-						</ListItem>
-					))}
+					{links.map((link, index) =>
+						!link.perms ? (
+							<ListItem key={index} disablePadding>
+								{link.action ? (
+									<ListItemButton onClick={link.action}>
+										<ListItemIcon>{link.icon}</ListItemIcon>
+										<ListItemText primary={link.text} />
+									</ListItemButton>
+								) : (
+									<ListItemButton component={NavLink} to={link.linkTo}>
+										<ListItemIcon>{link.icon}</ListItemIcon>
+										<ListItemText>{link.text}</ListItemText>
+									</ListItemButton>
+								)}
+							</ListItem>
+						) : (
+							link.perms.includes(user.role) && (
+								<ListItem key={index} disablePadding>
+									{link.action ? (
+										<ListItemButton onClick={link.action}>
+											<ListItemIcon>{link.icon}</ListItemIcon>
+											<ListItemText primary={link.text} />
+										</ListItemButton>
+									) : (
+										<ListItemButton component={NavLink} to={link.linkTo}>
+											<ListItemIcon>{link.icon}</ListItemIcon>
+											<ListItemText>{link.text}</ListItemText>
+										</ListItemButton>
+									)}
+								</ListItem>
+							)
+						)
+					)}
 				</List>
 				<Divider />
 			</Drawer>
@@ -261,4 +311,4 @@ const mapStateToProps = (state) => ({
 	project: state.project.currentProject,
 });
 
-export default connect(mapStateToProps, { logoutUser, setProject })(RDrawer);
+export default connect(mapStateToProps, { logoutUser, resetProject })(RDrawer);

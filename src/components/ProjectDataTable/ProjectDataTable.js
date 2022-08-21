@@ -28,34 +28,7 @@ function useWindowDimensions() {
 	return windowDimensions;
 }
 
-const rows = [
-	{
-		id: 1,
-		projectName: "Blog content",
-		tag: "BC",
-		type: "Content Managmenet Project",
-		owner: "Pero Perić",
-		department: "Content Managmenet",
-	},
-	{
-		id: 2,
-		projectName: "Blog finances",
-		tag: "BF",
-		type: "Sales Projects",
-		owner: "Petar Petrić",
-		department: "Finances",
-	},
-	{
-		id: 3,
-		projectName: "Blog interface design",
-		tag: "BID",
-		type: "UI/UX Project",
-		owner: "Marko Markić",
-		department: "Design",
-	},
-];
-
-const ProjectDataTable = () => {
+const ProjectDataTable = ({ data }) => {
 	const { width, height } = useWindowDimensions();
 	let elementCount = 6;
 	const columns = [
@@ -64,26 +37,30 @@ const ProjectDataTable = () => {
 			headerName: "Name",
 			width: width / elementCount,
 			renderCell: (params) => (
-				<Link to='/projects/1/board'>{params.row.projectName}</Link>
+				<Link to={`/projects/${params.row._id}/board`}>
+					{params.row.projectName}
+				</Link>
 			),
 		},
 		{
-			field: "tag",
+			field: "projectTag",
 			headerName: "Tag",
 			width: width / elementCount,
 		},
 		{
-			field: "type",
+			field: "projectType",
 			headerName: "Type",
 			width: width / elementCount,
 		},
 		{
-			field: "owner",
-			headerName: "Owner",
+			field: "teamLead",
+			headerName: "Team Lead",
 			width: width / elementCount,
+			valueGetter: (params) =>
+				params.row?.teamLead?.firstName + " " + params.row?.teamLead?.lastName,
 		},
 		{
-			field: "department",
+			field: "projectDepartment",
 			headerName: "Department",
 			width: width / elementCount,
 		},
@@ -107,12 +84,13 @@ const ProjectDataTable = () => {
 	return (
 		<Box sx={{ height: "550px", mt: "2rem", width: "100%" }}>
 			<DataGrid
-				rows={rows}
+				rows={data}
 				columns={columns}
 				pageSize={5}
 				rowsPerPageOptions={[5]}
 				checkboxSelection
 				disableSelectionOnClick
+				getRowId={(row) => row._id}
 			/>
 		</Box>
 	);
