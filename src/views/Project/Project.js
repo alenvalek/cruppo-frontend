@@ -51,6 +51,18 @@ const Project = ({ setProject, user }) => {
 
 	const [workLogOpen, setWorkLogOpen] = useState(false);
 
+	const addToRecent = async () => {
+		try {
+			await api.get(`/users/recent/${id}`);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		addToRecent();
+	}, []);
+
 	const fetchSummary = async () => {
 		try {
 			const res = await api.get(`/projects/${id}/summary`);

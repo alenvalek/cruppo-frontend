@@ -1,12 +1,20 @@
 import { Grow, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const ProjectCard = ({ name, type }) => {
+const ProjectCard = ({ name, type, id }) => {
+	const navigate = useNavigate();
+
+	const handleNav = () => {
+		navigate(`/projects/${id}/board`, { replace: true });
+	};
+
 	return (
 		<Grow in={true} appear={true} timeout={1000}>
 			<Grid container my={1}>
 				<Paper
 					elevation={10}
+					onClick={handleNav}
 					sx={{
 						cursor: "pointer",
 						padding: 1,

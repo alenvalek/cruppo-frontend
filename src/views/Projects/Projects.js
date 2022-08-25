@@ -62,15 +62,20 @@ const Projects = ({ user }) => {
 				<Grid item xs={12} md={12}>
 					<div className={styles.projectListContainer}>
 						<ul className={styles.projectList}>
-							{projects &&
-								projects.length > 0 &&
-								projects.map((project, index) => {
-									console.log(project);
+							{user &&
+								user.recentlyViewed &&
+								user.recentlyViewed.length === 0 &&
+								"No recent projects or reload is required"}
+							{user &&
+								user.recentlyViewed &&
+								user.recentlyViewed.length > 0 &&
+								user.recentlyViewed.map((project, index) => {
 									return (
-										<li key={index}>
+										<li key={project._id}>
 											<ProjectCard
 												type={project.projectType}
-												name={project.projectType}
+												name={project.projectName}
+												id={project._id}
 											/>
 										</li>
 									);

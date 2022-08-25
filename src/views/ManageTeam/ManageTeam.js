@@ -13,21 +13,21 @@ import { setProject } from "../../store/actions/project";
 import { toast } from "react-toastify";
 
 const ManageTeam = ({ project, setProject, currentUser }) => {
-	const { projectid: id } = useParams();
+	const { projectid } = useParams();
 
 	const fetchTeamUsers = async () => {
 		const res = await api.get(`/users/${project._id}`);
 		setUsers(res.data);
 	};
 
-	const fetchAvaliableUsers = async (isRefresh = true) => {
+	const fetchAvaliableUsers = async () => {
 		const res = await api.get("/users");
 		const array = res.data;
 		const actualArray = array.filter(
 			(user) => !users.some((userB) => user._id === userB._id)
 		);
 		setAvaliableUsers(actualArray);
-		if (!selectedUser || isRefresh) {
+		if (!selectedUser) {
 			setSelectedUser(actualArray[0]);
 		}
 	};
@@ -38,9 +38,10 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 
 	const addUser = async (userID) => {
 		try {
-			const res = await api.post(`/projects/${id}/${userID}`);
+			const res = await api.post(`/projects/${projectid}/${userID}`);
 			console.log(res.data);
 			setUsers(res.data);
+			setSelectedUser(null);
 			toast.success("Successfully added a user to the team.", {
 				position: "bottom-right",
 				autoClose: 5000,
@@ -67,7 +68,7 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 	const removeUser = async (userID) => {
 		try {
 			console.log(userID);
-			const res = await api.delete(`/projects/${id}/${userID}`);
+			const res = await api.delete(`/projects/${projectid}/${userID}`);
 			console.log(res.data);
 			toast.success("Successfully removed a user.", {
 				position: "bottom-right",
@@ -93,7 +94,7 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 	};
 
 	useEffect(() => {
-		setProject(id);
+		setProject(projectid);
 	}, []);
 
 	useEffect(() => {
@@ -110,7 +111,9 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 			<Grid item xs={12}>
 				<Typography variant='h3'>Manage team</Typography>
 			</Grid>
-			{currentUser._id !== project.teamLead ? (
+			{project &&
+			project.teamLead &&
+			currentUser._id !== project.teamLead._id ? (
 				<Grid item xs={12}>
 					<Typography variant='h6'>
 						Can't manage a team that's not yours
@@ -160,15 +163,17 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 						<Typography variant='h5'>{user.position.positionName}</Typography>
 					</Grid>
 					<Grid item xs={3} mb={1}>
-						{currentUser._id === project.teamLead && (
-							<Button
-								color='error'
-								variant='outlined'
-								onClick={(e) => removeUser(user._id)}
-								disabled={currentUser._id === user._id}>
-								Remove user from team
-							</Button>
-						)}
+						{project &&
+							project.teamLead &&
+							currentUser._id === project.teamLead._id && (
+								<Button
+									color='error'
+									variant='outlined'
+									onClick={(e) => removeUser(user._id)}
+									disabled={currentUser._id === user._id}>
+									Remove user from team
+								</Button>
+							)}
 					</Grid>
 					<div
 						style={{
