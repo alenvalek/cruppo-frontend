@@ -80,7 +80,9 @@ const Login = ({ user, loginUser }) => {
 							onClick={formik.handleSubmit}>
 							Login
 						</Button>
-						<Link to='/account-recovery'>Forgot your credentials?</Link>
+						<Typography variant='body1' textAlign='center'>
+							Forgot your credentials? Contact your company system administrator
+						</Typography>
 					</Grid>
 				</Paper>
 			</Grid>

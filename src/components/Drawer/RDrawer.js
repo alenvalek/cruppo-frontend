@@ -103,16 +103,11 @@ const RDrawer = ({
 			linkTo: "/",
 			icon: <LoginIcon />,
 		},
-		{
-			text: "Apply for a job",
-			linkTo: "/application",
-			icon: <NoteAddIcon />,
-		},
 	];
 
 	const cleanLogout = () => {
 		logoutUser();
-		navigate("/", { replace: true });
+		navigate("/");
 	};
 
 	const cleanReturn = () => {
@@ -277,6 +272,7 @@ const RDrawer = ({
 								)}
 							</ListItem>
 						) : (
+							user &&
 							link.perms.includes(user.role) && (
 								<ListItem key={index} disablePadding>
 									{link.action ? (

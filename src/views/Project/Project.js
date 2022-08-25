@@ -369,6 +369,8 @@ const Project = ({ setProject, user }) => {
 							onChange={formik.handleChange}
 							variant='outlined'
 							fullWidth
+							multiline
+							minRows={3}
 							label='Description'
 						/>
 					</Grid>
@@ -504,7 +506,7 @@ const Project = ({ setProject, user }) => {
 																					)}
 																					{item.priority === 2 && (
 																						<Chip
-																							label='low priority'
+																							label='medium priority'
 																							sx={{ width: "100%" }}
 																							color='warning'
 																						/>
@@ -587,16 +589,20 @@ const Project = ({ setProject, user }) => {
 										)}
 										{isModalEditMode ? null : (
 											<>
-												<Button
-													startIcon={<AddCommentIcon />}
-													variant='outlined'
-													color='info'
-													sx={{ marginRight: "1rem" }}
-													onClick={(e) => setWorkLogOpen((prev) => !prev)}>
-													{workLogOpen
-														? "Close work logs"
-														: "Add a new work log"}
-												</Button>
+												{selectedTask.asignee &&
+													selectedTask.asignee._id === user._id && (
+														<Button
+															startIcon={<AddCommentIcon />}
+															variant='outlined'
+															color='info'
+															sx={{ marginRight: "1rem" }}
+															onClick={(e) => setWorkLogOpen((prev) => !prev)}>
+															{workLogOpen
+																? "Close work logs"
+																: "Add a new work log"}
+														</Button>
+													)}
+
 												{selectedTask.asignee &&
 												selectedTask.asignee._id === user._id ? (
 													<Button
@@ -848,12 +854,24 @@ const Project = ({ setProject, user }) => {
 								</Grid>
 								<Grid item xs={12} mx={2} display='flex' alignItems='center'>
 									<Avatar sx={{ bgcolor: "orange", marginRight: 2 }}>
-										{selectedTask.reportedBy.firstName[0]}
-										{selectedTask.reportedBy.lastName[0]}
+										{selectedTask.reportedBy &&
+											selectedTask.reportedBy.firstName && (
+												<>
+													{selectedTask.reportedBy.firstName[0]}
+													{selectedTask.reportedBy.lastName[0]}
+												</>
+											)}
 									</Avatar>
 									<Typography variant='h6'>
-										Reported by: {selectedTask.reportedBy.firstName}{" "}
-										{selectedTask.reportedBy.lastName}
+										Reported by:{" "}
+										{selectedTask.reportedBy ? (
+											<>
+												{selectedTask.reportedBy.firstName}{" "}
+												{selectedTask.reportedBy.lastName}
+											</>
+										) : (
+											"Unknown user"
+										)}
 									</Typography>
 								</Grid>
 								{selectedTask.deadline && (

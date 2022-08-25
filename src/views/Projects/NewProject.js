@@ -11,6 +11,7 @@ const NewProject = () => {
 			type: "",
 			tag: "",
 			department: "",
+			url: "",
 		},
 		onSubmit: async (values) => {
 			try {
@@ -19,6 +20,7 @@ const NewProject = () => {
 					projectType: values.type,
 					projectTag: values.tag,
 					projectDepartment: values.department,
+					url: values.url,
 				});
 				toast.success("Succesfully created a new project", {
 					position: "bottom-right",
@@ -86,6 +88,16 @@ const NewProject = () => {
 					label='Project department'
 					onChange={formik.handleChange}
 					value={formik.values.department}
+				/>
+			</Grid>
+			<Grid item xs={12} mt={3}>
+				<TextField
+					name='url'
+					variant='standard'
+					sx={{ width: "50%" }}
+					label='URL (github/figma..) [optional]'
+					onChange={formik.handleChange}
+					value={formik.values.url}
 				/>
 			</Grid>
 			<Grid item xs={12} mt={3}>

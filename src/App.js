@@ -26,6 +26,7 @@ import EditJob from "./views/Jobs/EditJob";
 import Complaints from "./views/Complaints/Complaints";
 import CreateComplaint from "./views/Complaints/CreateComplaint";
 import ComplaintDetails from "./views/Complaints/ComplaintDetails";
+import Confirm from "./views/Confirm/Confirm";
 
 function App({ loadUserData, user, loading, resetProject }) {
 	const projectID = useParams().projectID;
@@ -52,10 +53,14 @@ function App({ loadUserData, user, loading, resetProject }) {
 				)}
 				<Routes>
 					{!user && !loading ? (
-						<Route path='/' element={<Login />} />
+						<>
+							<Route path='/' element={<Login />} />
+							<Route path='/confirm/:token' element={<Confirm />} />
+						</>
 					) : (
 						<Route element={<PrivateRoutes />}>
 							<Route path='/' element={<Home />} />
+							<Route path='/confirm/:token' element={<Confirm />} />
 							<Route path='/activity' element={<Activity />} />
 							<Route path='/complaints' element={<Complaints />} />
 							<Route

@@ -60,7 +60,7 @@ const UserCreate = () => {
 			});
 			clearForm();
 		} catch (error) {
-			toast.error(error.response.data.msg || "Unknown error", {
+			toast.error(error.response.data?.msg || "Unknown error", {
 				position: "bottom-right",
 				autoClose: 5000,
 				hideProgressBar: false,
@@ -138,7 +138,7 @@ const UserCreate = () => {
 					<Select
 						labelId='id'
 						value={jobPosition}
-						onChange={(e, newValue) => setJobPosition(newValue)}>
+						onChange={(e, newValue) => setJobPosition(newValue._id)}>
 						{jobPositions.map((r) => (
 							<MenuItem key={r._id} value={r._id}>
 								{r.positionName} (recommended salary: {r.recommendedSalary})
@@ -153,7 +153,7 @@ const UserCreate = () => {
 					<Select
 						labelId='id'
 						value={role}
-						onChange={(e, newValue) => setRole(newValue)}>
+						onChange={(e) => setRole(e.target.value)}>
 						<MenuItem value='employee'>Employee</MenuItem>
 						<MenuItem value='admin'>Admin</MenuItem>
 						<MenuItem value='hr'>HR</MenuItem>

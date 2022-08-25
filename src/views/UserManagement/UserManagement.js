@@ -16,6 +16,14 @@ const UserManagement = ({ currentUser }) => {
 		navigate(`/users/create`, { replace: true });
 	};
 
+	const sendEmail = async (id) => {
+		try {
+			await api.get(`/users/confirm/resend/${id}`);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const fetchAvaliableUsers = async () => {
 		try {
 			const res = await api.get("/users");
@@ -87,7 +95,7 @@ const UserManagement = ({ currentUser }) => {
 								color='success'
 								variant='contained'
 								fullWidth
-								disabled={currentUser._id === user._id}>
+								onClick={(e) => sendEmail(user._id)}>
 								Resend confirmation email
 							</Button>
 						</Grid>

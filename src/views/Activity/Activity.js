@@ -30,9 +30,15 @@ const Activity = () => {
 					<Grid container>
 						<Grid item xs={12} mt={3}>
 							<Alert variant='outlined' color='success'>
-								<span>{moment(act.createdAt).fromNow()}</span> | User{" "}
+								<span>{moment(act.createdAt).fromNow()}</span> |{" "}
 								<strong>
-									{act.user.firstName} {act.user.lastName}
+									{act.user ? (
+										<>
+											{act.user.firstName} {act.user.lastName}
+										</>
+									) : (
+										"Deleted user"
+									)}
 								</strong>{" "}
 								has <strong>{act.actionType}d</strong> a{" "}
 								<strong>

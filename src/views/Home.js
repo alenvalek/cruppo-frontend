@@ -5,7 +5,11 @@ const Home = ({ user, isLoading }) => {
 	return (
 		<>
 			{user && !isLoading && (
-				<Grid container>
+				<Grid
+					container
+					alignItems='center'
+					justifyContent='center'
+					sx={{ minHeight: "80vh" }}>
 					<Typography variant='h2'>
 						Welcome, {`${user.firstName}  ${user.lastName}`}
 					</Typography>

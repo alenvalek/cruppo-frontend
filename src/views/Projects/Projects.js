@@ -7,8 +7,9 @@ import styles from "./Projects.module.css";
 import { toast } from "react-toastify";
 import api from "../../api/api";
 import { flushSync } from "react-dom";
+import { connect } from "react-redux";
 
-const Projects = () => {
+const Projects = ({ user }) => {
 	const navigate = useNavigate();
 
 	const [projects, setProjects] = useState([]);
@@ -44,16 +45,18 @@ const Projects = () => {
 				<Grid item>
 					<Typography variant='h3'>Projects</Typography>
 				</Grid>
-				<Grid item>
-					<Button variant='contained' color='primary' onClick={handleNav}>
-						Create project
-					</Button>
-				</Grid>
+				{user && user.position.canStartProject && (
+					<Grid item>
+						<Button variant='contained' color='primary' onClick={handleNav}>
+							Create project
+						</Button>
+					</Grid>
+				)}
 			</Grid>
 			<Grid container mt={4}>
 				<Grid item xs={12} md={12}>
 					<Typography variant='body1'>
-						<strong>Favorite projects</strong>
+						<strong>Recent projects</strong>
 					</Typography>
 				</Grid>
 				<Grid item xs={12} md={12}>
@@ -84,4 +87,8 @@ const Projects = () => {
 	);
 };
 
-export default Projects;
+const mapStateToProps = (state) => ({
+	user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(Projects);
