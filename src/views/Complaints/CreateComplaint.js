@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const CreateComplaint = () => {
 	const [title, setTitle] = useState("");
@@ -27,7 +28,25 @@ const CreateComplaint = () => {
 				body,
 				isAnon,
 			});
+			toast.success("Successfully sent a complaint", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 		clearState();

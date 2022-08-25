@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const Confirm = () => {
 	const navigate = useNavigate();
@@ -40,8 +41,26 @@ const Confirm = () => {
 			await api.patch(`users/confirm/${userID}`, { password });
 			setPassword("");
 			setConfirmPassword("");
+			toast.success("Successfully changed password and/or confirmed account.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			navigate("/", { replace: true });
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};

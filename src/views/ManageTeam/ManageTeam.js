@@ -1,9 +1,7 @@
 import {
 	Autocomplete,
 	Button,
-	FormControl,
 	Grid,
-	InputLabel,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -12,6 +10,7 @@ import { connect } from "react-redux";
 import { useParams } from "react-router-dom";
 import api from "../../api/api";
 import { setProject } from "../../store/actions/project";
+import { toast } from "react-toastify";
 
 const ManageTeam = ({ project, setProject, currentUser }) => {
 	const { projectid: id } = useParams();
@@ -42,7 +41,25 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 			const res = await api.post(`/projects/${id}/${userID}`);
 			console.log(res.data);
 			setUsers(res.data);
+			toast.success("Successfully added a user to the team.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};
@@ -52,7 +69,25 @@ const ManageTeam = ({ project, setProject, currentUser }) => {
 			console.log(userID);
 			const res = await api.delete(`/projects/${id}/${userID}`);
 			console.log(res.data);
+			toast.success("Successfully removed a user.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};

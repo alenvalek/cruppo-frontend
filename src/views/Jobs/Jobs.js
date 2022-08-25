@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const Jobs = () => {
 	const [jobs, setJobs] = useState([]);
@@ -13,6 +14,15 @@ const Jobs = () => {
 			const res = await api.get("/roles");
 			setJobs(res.data);
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};

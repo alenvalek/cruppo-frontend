@@ -32,7 +32,7 @@ const NewProject = () => {
 					progress: undefined,
 				});
 			} catch (error) {
-				toast.error(error.response.data.msg || "Unknown error", {
+				toast.error(error.response.data?.msg || "Unknown error", {
 					position: "bottom-right",
 					autoClose: 5000,
 					hideProgressBar: false,

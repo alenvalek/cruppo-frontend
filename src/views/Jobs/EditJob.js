@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const EditJob = () => {
 	const [positionName, setPositionName] = useState("");
@@ -28,7 +29,25 @@ const EditJob = () => {
 			if (description) editedJob.description = description;
 
 			await api.patch(`/roles/${jobid}`, editedJob);
+			toast.success("Successfully edited the job.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};
@@ -43,6 +62,15 @@ const EditJob = () => {
 			setCanMakeProjects(data.canStartProject);
 			if (data.description) setDescription(data.description);
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};

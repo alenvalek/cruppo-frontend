@@ -68,7 +68,6 @@ const UserEdit = () => {
 
 	const handleSubmit = async () => {
 		try {
-			console.log("woow");
 			await api.patch(`users/user/${userid}`, {
 				email,
 				firstName,
@@ -153,7 +152,7 @@ const UserEdit = () => {
 					<Select
 						labelId='id'
 						value={jobPosition}
-						onChange={(e, newValue) => setJobPosition(newValue)}>
+						onChange={(e) => setJobPosition(e.target.value)}>
 						{roles.map((r) => (
 							<MenuItem key={r._id} value={r._id}>
 								{r.positionName}
@@ -168,7 +167,7 @@ const UserEdit = () => {
 					<Select
 						labelId='id'
 						value={role}
-						onChange={(e, newValue) => setRole(newValue)}>
+						onChange={(e) => setRole(e.target.value)}>
 						<MenuItem value='employee'>Employee</MenuItem>
 						<MenuItem value='admin'>Admin</MenuItem>
 						<MenuItem value='hr'>HR</MenuItem>

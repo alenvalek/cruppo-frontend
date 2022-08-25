@@ -57,7 +57,11 @@ const ProjectDataTable = ({ data }) => {
 			headerName: "Team Lead",
 			width: width / elementCount,
 			valueGetter: (params) =>
-				params.row?.teamLead?.firstName + " " + params.row?.teamLead?.lastName,
+				params.row.teamLead
+					? params.row?.teamLead?.firstName +
+					  " " +
+					  params.row?.teamLead?.lastName
+					: "Unknown or deleted user",
 		},
 		{
 			field: "projectDepartment",

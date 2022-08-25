@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const CreateJob = () => {
 	const [positionName, setPositionName] = useState("");
@@ -25,7 +26,25 @@ const CreateJob = () => {
 			if (description) newPosition.description = description;
 
 			await api.post("/roles", newPosition);
+			toast.error("Successfully created a new job position.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 		clearForm();

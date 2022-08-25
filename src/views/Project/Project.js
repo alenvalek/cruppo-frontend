@@ -52,10 +52,22 @@ const Project = ({ setProject, user }) => {
 	const [workLogOpen, setWorkLogOpen] = useState(false);
 
 	const fetchSummary = async () => {
-		const res = await api.get(`/projects/${id}/summary`);
-		const tasksData = await api.get(`/tasks/${id}`);
-		setTasks(tasksData.data.tasks);
-		setSummary(res.data);
+		try {
+			const res = await api.get(`/projects/${id}/summary`);
+			const tasksData = await api.get(`/tasks/${id}`);
+			setTasks(tasksData.data.tasks);
+			setSummary(res.data);
+		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		}
 	};
 
 	const submitLog = async () => {
@@ -72,7 +84,25 @@ const Project = ({ setProject, user }) => {
 			setSelectedTask({ ...selectedTask, workLogs: res.data });
 			clearLogForm();
 			fetchSummary();
+			toast.success("Successfully added a new task", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.error(error);
 		}
 	};
@@ -82,7 +112,25 @@ const Project = ({ setProject, user }) => {
 			const res = await api.patch(`/tasks/${id}/${selectedTask._id}/assign`);
 			setSelectedTask({ ...selectedTask, asignee: res.data });
 			fetchSummary();
+			toast.success("Successfully assigned self to the task.", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};

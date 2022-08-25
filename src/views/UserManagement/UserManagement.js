@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/api";
+import { toast } from "react-toastify";
 
 const UserManagement = ({ currentUser }) => {
 	const [users, setUsers] = useState([]);
@@ -19,7 +20,25 @@ const UserManagement = ({ currentUser }) => {
 	const sendEmail = async (id) => {
 		try {
 			await api.get(`/users/confirm/resend/${id}`);
+			toast.success("Successfully sent an email", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};
@@ -39,8 +58,25 @@ const UserManagement = ({ currentUser }) => {
 			await api.delete(`/users/user/${id}`);
 			const filteredArray = users.filter((user) => user._id !== id);
 			setUsers(filteredArray);
-			console.log("test 2");
+			toast.success("Successfully deleted a user", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} catch (error) {
+			toast.error(error.response.data?.msg || "Unknown error", {
+				position: "bottom-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 			console.log(error);
 		}
 	};
