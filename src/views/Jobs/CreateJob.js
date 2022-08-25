@@ -26,7 +26,7 @@ const CreateJob = () => {
 			if (description) newPosition.description = description;
 
 			await api.post("/roles", newPosition);
-			toast.error("Successfully created a new job position.", {
+			toast.success("Successfully created a new job position.", {
 				position: "bottom-right",
 				autoClose: 5000,
 				hideProgressBar: false,
