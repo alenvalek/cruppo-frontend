@@ -51,6 +51,10 @@ const Project = ({ setProject, user }) => {
 
 	const [workLogOpen, setWorkLogOpen] = useState(false);
 
+	const capitalizeFirstLetter = (str) => {
+		return str.charAt(0).toUpperCase() + str.slice(1);
+	};
+
 	const addToRecent = async () => {
 		try {
 			await api.get(`/users/recent/${id}`);
@@ -165,8 +169,13 @@ const Project = ({ setProject, user }) => {
 
 	const toggleEdit = async (isPublish = false) => {
 		if (isPublish) {
-			const res = await api.patch(`/tasks/${id}/${selectedTask._id}/detail`);
-			setSelectedTask(res.data);
+			const res = await api.patch(`/tasks/${id}/${selectedTask._id}/detail`, {
+				title: editableTitle,
+				body: editableDesc,
+				type: editableType,
+			});
+			const item = res.data;
+			setSelectedTask(item);
 		}
 		setIsModalEditMode(!isModalEditMode);
 	};
@@ -248,6 +257,8 @@ const Project = ({ setProject, user }) => {
 		left: "50%",
 		transform: "translate(-50%, -50%)",
 		width: "90%",
+		overflow: "scroll",
+		height: "100%",
 		backgroundColor: "white",
 		border: "1px solid #000",
 		borderRadius: 5,
@@ -701,7 +712,9 @@ const Project = ({ setProject, user }) => {
 												</FormControl>
 											)
 										) : (
-											<Typography variant='h6'>Type: Task</Typography>
+											<Typography variant='h6'>
+												Type: {capitalizeFirstLetter(selectedTask.taskType)}
+											</Typography>
 										)}
 									</Grid>
 									<Grid item xs={6} mt={3}>
